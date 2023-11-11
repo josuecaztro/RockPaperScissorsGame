@@ -1,104 +1,154 @@
-//For some reason, I had to include this 👇🏽 or else the button wouldn't work. I found this out on Stack Overflow, lol.
-window.onload=function(){
+//beginning variables
+let startButton = document.querySelector("#the-game-button");
+let appearGame = document.querySelector("#launch-start");
 
-//this function is just my whole page of code pretty much. Im throwing this all into that one button click. 
-function startGame(){
+//This makes the game launch at the Start button.
+//Once pressed, the Start Button disappears.
+startButton.addEventListener("click", () => {
+    if (appearGame.style.display === "none"){
+        appearGame.style.display = "block";
+        startButton.style.display = "none";
+        document.querySelector("#my-name").style.display = "none";
+        game();
+    } else {
+        appearGame.style.display = "none";
+    }
+});
 
-//this function is executed right before the game starts, so we can store the computer's generated choice into a variable.
+//When declared, this function returns a computer randomized choice. 
 function getComputerChoice(){
     let gameChoices = ["rock", "paper", "scissors"];
     let randomChoice = gameChoices[Math.floor(Math.random() * gameChoices.length)];
     return randomChoice;
 }
 
+//just DOM elements being built
+let displayMessage = document.querySelector("#main-words");
+let scoreBoard = document.querySelector("#score-board");
+let roundsBoard = document.querySelector("#round-counter");
+let rockButton = document.querySelector("#rock-button");
+let paperButton = document.querySelector("#paper-button");
+let scissorsButton = document.querySelector("#scissors-button");
+let againButton = document.querySelector("#play-again");
+let endText = document.querySelector("#for-the-end");
 
-//this is just us declaring the game function, it contains the score for you and the computer too. but we are not calling it just yet. 
+let playerSelection = null;
+
+
+
+
+
+
+//the WHOLE game in one function
 function game (){
-    let tries = 0;
+
+    let rounds = 0;
     let userScore = 0;
     let computerScore = 0;
+    scoreBoard.textContent = "Your Score: " + userScore + " Computer's Score: " + computerScore;
 
 
-    while (tries < 5){
-        let playerPreSelection = prompt("Welcome to a game of Rock, Paper, Scissors! To start, please type in either rock, paper, or scissors to play.");
-        let playerSelection = (playerPreSelection).toLowerCase().trim();
-        let computerSelection = getComputerChoice();
-        playARound(playerSelection, computerSelection);
-        tries++;
-    }
+    //the primary function that plays a round of the game
+    function playRound (){
+    let computerSelection = getComputerChoice();
+    rounds++;
 
-    function playARound (playerSelection, computerSelection){
-        let scoreBoard = ("Your Score: " + userScore + " Computer's Score: " + computerScore);
+    roundsBoard.textContent = "Round #" + rounds;
 
 
-        if (playerSelection === "rock" && computerSelection === "rock"){
-            userScore++;
+     //all the possible combinations with the correct display message
+        if (playerSelection === computerSelection){
+            displayMessage.textContent = "It's a Tie!";
+            scoreBoard.textContent = "Your Score: " + userScore + " Computer's Score: " + computerScore;
+        } else if (playerSelection === "rock" && computerSelection === "paper"){
             computerScore++;
-            alert("It's a Tie!" + scoreBoard);
-
+            displayMessage.textContent = "You Lose! Paper beats rock.";
+            scoreBoard.textContent = "Your Score: " + userScore + " Computer's Score: " + computerScore;
 
         } else if (playerSelection === "rock" && computerSelection === "scissors"){
             userScore++;
-            alert("You Win! Rock beats scissors." + scoreBoard);
-
-
-        } else if (playerSelection === "rock" && computerSelection === "paper"){
-            computerScore++;
-            alert("You Lose! Paper beats rock." + scoreBoard);
+            displayMessage.textContent = "You win! Rock beats scissors.";
+            scoreBoard.textContent = "Your Score: " + userScore + " Computer's Score: " + computerScore;
 
         } else if (playerSelection === "paper" && computerSelection === "rock"){
             userScore++;
-            alert("You Win! Paper beats rock." + scoreBoard);
-
-
-        } else if (playerSelection === "paper" && computerSelection === "paper"){
-            userScore++;
-            computerScore++;
-            alert("It's a Tie!" + scoreBoard);
-
+            displayMessage.textContent = "You win! Paper beats rock.";
+            scoreBoard.textContent = "Your Score: " + userScore + " Computer's Score: " + computerScore;
 
         } else if (playerSelection === "paper" && computerSelection === "scissors"){
             computerScore++;
-            alert("You Lose! Scissors beats paper." + scoreBoard);
+            displayMessage.textContent = "You lose! Scissors beats paper.";
+            scoreBoard.textContent = "Your Score: " + userScore + " Computer's Score: " + computerScore;
 
         } else if (playerSelection === "scissors" && computerSelection === "rock"){
             computerScore++;
-            alert("You Lose! Rock beats scissors." + scoreBoard);
+            displayMessage.textContent = "You lose! Rock beats scissors.";
+            scoreBoard.textContent = "Your Score: " + userScore + " Computer's Score: " + computerScore;
 
         } else if (playerSelection === "scissors" && computerSelection === "paper"){
             userScore++;
-            alert("You Win! Scissors beats paper." + scoreBoard);
-
-
-        } else if (playerSelection === "scissors" && computerSelection === "scissors"){
-            userScore++;
-            computerScore++;
-            alert("It's a Tie!" + scoreBoard);
-
+            displayMessage.textContent = "You win! Scissors beats paper!";
+            scoreBoard.textContent = "Your Score: " + userScore + " Computer's Score: " + computerScore;
 
         }
-    }
 
-    alert("The game is OVER.");
+        if (rounds === 5){
+        againButton.style.display = "block";
+    
         if (userScore > computerScore){
-        alert("Your Score: " + userScore + " Computer Score: " + computerScore + "Congratulations, you won!");
+            rockButton.style.display = "none";
+            paperButton.style.display = "none";
+            scissorsButton.style.display = "none";
+            roundsBoard.textContent = "The computer chose " + computerSelection + "!";
+            displayMessage.textContent = "🎉 You won the game!";
+            endText.textContent = "Round #5";
         } else if (userScore === computerScore){
-        alert("Your Score: " + userScore + " Computer Score: " + computerScore + "   Wow, it's a tie!");
-        } else if (userScore < computerScore) {
-        alert("Your Score: " + userScore + " Computer Score: " + computerScore + "   Sorry, you lost to the PC.");
+            rockButton.style.display = "none";
+            paperButton.style.display = "none";
+            scissorsButton.style.display = "none";
+            roundsBoard.textContent = "The computer chose " + computerSelection + "!";
+            displayMessage.textContent = "Wow, the game's tied.";
+            endText.textContent = "Round #5";
+
+        } else if (userScore < computerScore){
+            rockButton.style.display = "none";
+            paperButton.style.display = "none";
+            scissorsButton.style.display = "none";
+            roundsBoard.textContent = "The computer chose " + computerSelection + "!";
+            displayMessage.textContent = "Sorry, you lost the game.";
+            endText.textContent = "Round #5";
+
+        }}
+
+       
+
+        
+
+
+
+
         }
+
+        rockButton.addEventListener("click", () => {
+            playerSelection = "rock";
+            playRound();
+        });
+        paperButton.addEventListener("click", () => {
+            playerSelection = "paper";
+            playRound();
+        });
+        scissorsButton.addEventListener("click", () => {
+            playerSelection = "scissors";
+            playRound();
+        });
+
+
+        againButton.addEventListener("click", () => {
+        location.reload();
+        })
 }
 
-//this calls the true actual game to execute (which is the function 👆🏼 we coded above). 
 game();
-
-};
-
-
-//this gives the button in your HTML document functionality to work on command. 
-document.getElementById("the-game-button").addEventListener("click", startGame);
-
-}
 
 
 
